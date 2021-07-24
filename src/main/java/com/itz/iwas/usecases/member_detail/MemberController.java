@@ -3,6 +3,7 @@ package com.itz.iwas.usecases.member_detail;
 import com.itz.iwas.models.Membership;
 import com.itz.iwas.usecases.member_detail.dao.MemberDao;
 import com.itz.iwas.usecases.member_detail.dao.PageableDao;
+import com.itz.iwas.usecases.member_detail.pojo.MembershipPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ public class MemberController {
     @GetMapping("/get/member-detail")
     public ResponseEntity<?> getMemberDetails(HttpServletRequest request, @RequestParam int id) {
         String token = request.getHeader("Authorization");
-        Membership getMember = memberService.getMemberDetail(id);
+        MembershipPojo getMember = memberService.getMemberDetail(id);
         return new ResponseEntity<>(getMember, HttpStatus.OK);
     }
 

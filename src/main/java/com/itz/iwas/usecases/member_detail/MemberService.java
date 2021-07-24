@@ -4,6 +4,7 @@ import com.itz.iwas.helpers.common.calc.DateTimeCalc;
 import com.itz.iwas.models.Membership;
 import com.itz.iwas.usecases.member_detail.dao.MemberDao;
 import com.itz.iwas.usecases.member_detail.dao.PageableDao;
+import com.itz.iwas.usecases.member_detail.pojo.MembershipPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,7 +18,7 @@ public class MemberService {
     @Autowired
     MemberRepository memberRepository;
 
-    public Membership getMemberDetail(int id) {
+    public MembershipPojo getMemberDetail(int id) {
         return memberRepository.findById(id);
     }
 
