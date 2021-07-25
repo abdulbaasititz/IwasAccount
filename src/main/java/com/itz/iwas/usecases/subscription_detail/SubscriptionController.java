@@ -2,11 +2,14 @@ package com.itz.iwas.usecases.subscription_detail;
 
 import com.itz.iwas.usecases.subscription_detail.pojo.SubscriptionPojo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -22,4 +25,19 @@ public class SubscriptionController {
         List<SubscriptionPojo> getAllSubscription = subscriptionService.getAllSubscription();
         return new ResponseEntity<>(getAllSubscription, HttpStatus.OK);
     }
+
+    @PostMapping("/get/subscription")
+    public ResponseEntity<?> getSubscription(HttpServletRequest request, @RequestParam int pageNumber
+            , @RequestParam int pageSize) {
+        Page<SubscriptionPojo> getSubscription = subscriptionService.getSubscription(pageNumber, pageSize);
+        return new ResponseEntity<>(getSubscription, HttpStatus.OK);
+
+    }
+//    @GetMapping("/get/subscription")
+//    public ResponseEntity<?> getSubscriptionByDate (HttpServletRequest request, @RequestParam Date fromDate
+//        ,@RequestParam Date toDate){
+//
+//
+//        return new ResponseEntity<>("",HttpStatus.OK);
+//    }
 }

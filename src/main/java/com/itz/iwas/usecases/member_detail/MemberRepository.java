@@ -6,6 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
+import java.util.List;
+
 @Repository
 public interface MemberRepository extends JpaRepository<Membership, Integer> {
     @Query(value = "SELECT JoiningDate , MemberNumber , MemberName, FatherName," +
@@ -15,4 +18,10 @@ public interface MemberRepository extends JpaRepository<Membership, Integer> {
     MembershipPojo findById(int pk0);
 
     Membership findByMemberNumber(String memberNumber);
+
+    @Query(value = "select * from Membership where JoiningDate Between ?1 and ?2", nativeQuery = true)
+    List<MembershipPojo> findByJoiningDateBetween(Date fromDate, Date toDate);
+
+    @Query(value = "SELECT count(MemberNumber) as totalMember FROM Membership", nativeQuery = true)
+    String countMemberNumber();
 }

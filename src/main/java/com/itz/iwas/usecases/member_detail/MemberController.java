@@ -2,16 +2,17 @@ package com.itz.iwas.usecases.member_detail;
 
 import com.itz.iwas.models.Membership;
 import com.itz.iwas.usecases.member_detail.dao.MemberDao;
-import com.itz.iwas.usecases.member_detail.dao.PageableDao;
 import com.itz.iwas.usecases.member_detail.pojo.MembershipPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -34,9 +35,10 @@ public class MemberController {
         return new ResponseEntity<>(getAllMember, HttpStatus.OK);
     }
 
-    @PostMapping("/get/member")
-    public ResponseEntity<?> getMember(HttpServletRequest request, @RequestBody PageableDao pageableDao) {
-        Page<Membership> getMember = memberService.getMember(pageableDao);
+    @GetMapping("/get/member")
+    public ResponseEntity<?> getMember(HttpServletRequest request, @RequestParam int pageNumber
+            , @RequestParam int pageSize) {
+        Page<Membership> getMember = memberService.getMember(pageNumber, pageSize);
         return new ResponseEntity<>(getMember, HttpStatus.OK);
     }
 
@@ -44,7 +46,13 @@ public class MemberController {
     public ResponseEntity<?> setMember(HttpServletRequest request, @RequestBody MemberDao memberDao) {
         String status = memberService.setMember(memberDao);
         return new ResponseEntity<>(status, HttpStatus.OK);
+    }
 
+    @GetMapping("/get/range-member")
+    public ResponseEntity<?> getMemberByDate(HttpServletRequest request, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate
+            , @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate) {
+        List<MembershipPojo> getMember = memberService.getMemberByDate(fromDate, toDate);
+        return new ResponseEntity<>(getMember, HttpStatus.OK);
     }
 
 }
