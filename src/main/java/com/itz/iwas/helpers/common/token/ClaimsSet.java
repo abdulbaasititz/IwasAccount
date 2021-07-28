@@ -35,7 +35,7 @@ public class ClaimsSet {
 
     public ClaimsDao getClaimsDetailsAfterSet(String token) throws Exception {
         ClaimsDao claimsDao = getClaimsDetails(token);
-        jwtUtil.setOrgDetails(claimsDao.getPlt(), claimsDao.getEid());
+        jwtUtil.setOrgDetails(claimsDao.getRol(), claimsDao.getEid());
         return claimsDao;
     }
 

@@ -9,7 +9,7 @@ public class ClaimsDao {
     private String iat;
     private String sub;
     private String exp;
-    private String plt;
+    private String rol;
     private String eid;
     private String unt;
 }

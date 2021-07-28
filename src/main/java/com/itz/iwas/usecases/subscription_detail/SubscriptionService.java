@@ -1,7 +1,7 @@
 package com.itz.iwas.usecases.subscription_detail;
 
 import com.itz.iwas.helpers.common.calc.DateTimeCalc;
-import com.itz.iwas.models.SubscriptionDum;
+import com.itz.iwas.models.Subscription;
 import com.itz.iwas.usecases.member_detail.MemberService;
 import com.itz.iwas.usecases.subscription_detail.dao.SubscriptionDao;
 import com.itz.iwas.usecases.subscription_detail.pojo.SubscriptionPojo;
@@ -38,7 +38,7 @@ public class SubscriptionService {
     }
 
     public Boolean checkSubscriptionByYear(Integer memberId, String subYear) {
-        SubscriptionDum subscription = subscriptionRepository.findByMemberIdAndSubscriptionYear(memberId, subYear);
+        Subscription subscription = subscriptionRepository.findByMemberIdAndSubscriptionYear(memberId, subYear);
         return subscription == null;
     }
 
@@ -47,14 +47,14 @@ public class SubscriptionService {
         if (memberId != 0) {
             if (checkSubscriptionByYear(memberId, subscriptionDao.getSubscriptionYear())) {
                 String formattedDate = new DateTimeCalc().getTodayDate();
-                SubscriptionDum subscription = new SubscriptionDum();
+                Subscription subscription = new Subscription();
                 subscription.setId(0);
                 subscription.setAmount(subscriptionDao.getAmount());
                 subscription.setSubscriptionYear(subscriptionDao.getSubscriptionYear());
                 subscription.setMemberId(memberId);
                 subscription.setCrBy(user);
                 subscription.setCrAt(formattedDate);
-                //subscriptionRepository.save(subscription);
+                subscriptionRepository.save(subscription);
                 return "success";
             }
             return "Member Subscribed already in current year";
@@ -69,8 +69,8 @@ public class SubscriptionService {
             if (checkSubscriptionByYear(memberId, subscriptionDao.getSubscriptionYear())) {
                 return "Member Not Subscribed in given year";
             }
-            SubscriptionDum subscription = subscriptionRepository.findByMemberId(memberId);
-            //subscriptionRepository.delete(subscription);
+            Subscription subscription = subscriptionRepository.findByMemberIdAndSubscriptionYear(memberId, subscriptionDao.getSubscriptionYear());
+            subscriptionRepository.delete(subscription);
             return "Removed the subscription in given year";
         } else {
             return "Set Member Details in Member page";

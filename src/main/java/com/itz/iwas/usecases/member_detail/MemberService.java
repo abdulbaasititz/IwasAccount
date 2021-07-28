@@ -18,8 +18,8 @@ public class MemberService {
     @Autowired
     MemberRepository memberRepository;
 
-    public MembershipPojo getMemberDetail(int id) {
-        return memberRepository.findById(id);
+    public MembershipPojo getMemberDetail(String memberNo) {
+        return memberRepository.findByMemberNo(memberNo);
     }
 
     public List<Membership> getAllMember() {
@@ -32,12 +32,12 @@ public class MemberService {
     }
 
     public Boolean checkMemberNumber(String memberNumber) {
-        Membership membership = memberRepository.findByMemberNumber(memberNumber);
+        Membership membership = memberRepository.findByMemberNumberAndIsActive(memberNumber, 1);
         return membership == null;
     }
 
     public Integer getMemberId(String memberNumber) {
-        Membership membership = memberRepository.findByMemberNumber(memberNumber);
+        Membership membership = memberRepository.findByMemberNumberAndIsActive(memberNumber, 1);
         if (membership == null) {
             return 0;
         } else {
@@ -51,6 +51,7 @@ public class MemberService {
             String formattedDate = new DateTimeCalc().getTodayDate();
             Membership membership = new Membership();
             membership.setId(0);
+            membership.setJoiningDate(memberDao.getJoiningDate());
             membership.setMemberNumber(memberDao.getMemberNumber());
             membership.setMemberName(memberDao.getMemberName());
             membership.setFatherName(memberDao.getFatherName());
@@ -59,7 +60,7 @@ public class MemberService {
             membership.setIsActive(1);
             membership.setCrBy(user);
             membership.setCrAt(formattedDate);
-            //memberRepository.save(membership);
+            memberRepository.save(membership);
             return "success";
         } else {
             return "data already present";
@@ -72,6 +73,7 @@ public class MemberService {
             String formattedDate = new DateTimeCalc().getTodayDate();
             Membership membership = new Membership();
             membership.setId(getNumber);
+            membership.setJoiningDate(memberDao.getJoiningDate());
             membership.setMemberNumber(memberDao.getMemberNumber());
             membership.setMemberName(memberDao.getMemberName());
             membership.setFatherName(memberDao.getFatherName());
@@ -80,7 +82,7 @@ public class MemberService {
             membership.setIsActive(1);
             membership.setUpBy(user);
             membership.setUpAt(formattedDate);
-            //memberRepository.save(membership);
+            memberRepository.save(membership);
             return "success";
         } else {
             return "No Data Present";
@@ -101,15 +103,13 @@ public class MemberService {
     }
 
     public String removeMember(String memberNumber, String user) {
-        Integer getNumber = getMemberId(memberNumber);
-        if (getNumber != 0) {
+        Membership membership = memberRepository.findByMemberNumberAndIsActive(memberNumber, 1);
+        if (membership != null) {
             String formattedDate = new DateTimeCalc().getTodayDate();
-            Membership membership = new Membership();
-            membership.setId(getNumber);
             membership.setIsActive(0);
             membership.setUpBy(user);
             membership.setUpAt(formattedDate);
-            //memberRepository.save(membership);
+            memberRepository.save(membership);
             return "Set as inactive";
         } else {
             return "No Data Present";

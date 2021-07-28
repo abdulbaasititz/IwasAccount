@@ -43,7 +43,7 @@ public class SubscriptionController {
         return new ResponseEntity<>(status, HttpStatus.OK);
     }
 
-    @PostMapping("/delete/subscription")
+    @PostMapping("/del/subscription")
     public ResponseEntity<?> deleteSubscription(HttpServletRequest request, @RequestBody SubscriptionDao subscriptionDao) throws Exception {
         ClaimsDao claimsDao = claimsSet.getClaimsDetailsAfterSet(request.getHeader("Authorization"));
         String status = subscriptionService.removeSubscription(subscriptionDao, claimsDao.getEid());

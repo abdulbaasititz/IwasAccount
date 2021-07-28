@@ -26,9 +26,9 @@ public class MemberController {
     ClaimsSet claimsSet;
 
     @GetMapping("/get/member-detail")
-    public ResponseEntity<?> getMemberDetails(HttpServletRequest request, @RequestParam int id) {
+    public ResponseEntity<?> getMemberDetails(HttpServletRequest request, @RequestParam String memberNumber) {
         String token = request.getHeader("Authorization");
-        MembershipPojo getMember = memberService.getMemberDetail(id);
+        MembershipPojo getMember = memberService.getMemberDetail(memberNumber);
         return new ResponseEntity<>(getMember, HttpStatus.OK);
     }
 
