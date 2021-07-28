@@ -36,7 +36,16 @@ public class MemberService {
         return membership == null;
     }
 
-    public String setMember(MemberDao memberDao) {
+    public Integer getMemberId(String memberNumber) {
+        Membership membership = memberRepository.findByMemberNumber(memberNumber);
+        if (membership == null) {
+            return 0;
+        } else {
+            return membership.getId();
+        }
+    }
+
+    public String setMember(MemberDao memberDao, String user) {
         Boolean checkNumber = checkMemberNumber(memberDao.getMemberNumber());
         if (checkNumber) {
             String formattedDate = new DateTimeCalc().getTodayDate();
@@ -48,23 +57,47 @@ public class MemberService {
             membership.setDesignation(memberDao.getDesignation());
             membership.setPermanentAddress(memberDao.getPermanentAddress());
             membership.setIsActive(1);
-            membership.setCrBy("test");
+            membership.setCrBy(user);
             membership.setCrAt(formattedDate);
             //memberRepository.save(membership);
             return "success";
         } else {
             return "data already present";
         }
+    }
+
+    public String editMember(MemberDao memberDao, String user) {
+        Integer getNumber = getMemberId(memberDao.getMemberNumber());
+        if (getNumber != 0) {
+            String formattedDate = new DateTimeCalc().getTodayDate();
+            Membership membership = new Membership();
+            membership.setId(getNumber);
+            membership.setMemberNumber(memberDao.getMemberNumber());
+            membership.setMemberName(memberDao.getMemberName());
+            membership.setFatherName(memberDao.getFatherName());
+            membership.setDesignation(memberDao.getDesignation());
+            membership.setPermanentAddress(memberDao.getPermanentAddress());
+            membership.setIsActive(1);
+            membership.setCrBy(user);
+            membership.setCrAt(formattedDate);
+            //memberRepository.save(membership);
+            return "success";
+        } else {
+            return "No Data Present";
+        }
 
     }
 
     public List<MembershipPojo> getMemberByDate(Date fromDate, Date toDate) {
-        List<MembershipPojo> getMember = memberRepository.findByJoiningDateBetween(fromDate, toDate);
-        return getMember;
+        return memberRepository.findByJoiningDateBetween(fromDate, toDate);
     }
 
     public String getMemberCount() {
         return memberRepository.countMemberNumber();
+    }
+
+    public String countMemberNumberByYear(Date fromDate, Date toDate) {
+        return memberRepository.countMemberNumberByYear(fromDate, toDate);
     }
 
 }

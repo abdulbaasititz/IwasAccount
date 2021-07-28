@@ -15,7 +15,7 @@ public class SubscriptionDum {
     @Column(name = "Id")
     private int id;
     @Column(name = "MemberId")
-    private int memberId;
+    private Integer memberId;
     @Column(name = "SubscriptionYear")
     private String subscriptionYear;
     @Column(name = "Amount")

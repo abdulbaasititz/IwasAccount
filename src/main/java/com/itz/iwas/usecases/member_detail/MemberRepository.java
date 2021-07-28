@@ -24,4 +24,8 @@ public interface MemberRepository extends JpaRepository<Membership, Integer> {
 
     @Query(value = "SELECT count(MemberNumber) as totalMember FROM Membership", nativeQuery = true)
     String countMemberNumber();
+
+    @Query(value = "select count(MemberNumber) from Membership where JoiningDate Between ?1 and ?2", nativeQuery = true)
+    String countMemberNumberByYear(Date fromDate, Date toDate);
+
 }

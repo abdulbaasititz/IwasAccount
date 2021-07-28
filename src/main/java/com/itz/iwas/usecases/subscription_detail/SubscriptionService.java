@@ -1,5 +1,9 @@
 package com.itz.iwas.usecases.subscription_detail;
 
+import com.itz.iwas.helpers.common.calc.DateTimeCalc;
+import com.itz.iwas.models.SubscriptionDum;
+import com.itz.iwas.usecases.member_detail.MemberService;
+import com.itz.iwas.usecases.subscription_detail.dao.SubscriptionDao;
 import com.itz.iwas.usecases.subscription_detail.pojo.SubscriptionPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,10 +17,8 @@ import java.util.List;
 public class SubscriptionService {
     @Autowired
     SubscriptionRepository subscriptionRepository;
-
-//    public List<SubscriptionDum> getAllSubscription(){
-//        return subscriptionRepository.findAll();
-//    }
+    @Autowired
+    MemberService memberService;
 
     public List<SubscriptionPojo> getAllSubscription() {
         return subscriptionRepository.getAllSubscription();
@@ -27,11 +29,51 @@ public class SubscriptionService {
         return subscriptionRepository.getSubscription(pg);
     }
 
-//    public List<SubscriptionPojo> getSubscriptionByDate(){
-//        return subscriptionRepository.getSubscriptionByDate();
-//    }
-
     public String getTotalAmount() {
         return subscriptionRepository.totalAmount();
+    }
+
+    public String totalAmountByYear(String fromYear, String toYear) {
+        return subscriptionRepository.totalAmountByYear(fromYear, toYear);
+    }
+
+    public Boolean checkSubscriptionByYear(Integer memberId, String subYear) {
+        SubscriptionDum subscription = subscriptionRepository.findByMemberIdAndSubscriptionYear(memberId, subYear);
+        return subscription == null;
+    }
+
+    public String setSubscription(SubscriptionDao subscriptionDao, String user) {
+        Integer memberId = memberService.getMemberId(subscriptionDao.getMemberNumber());
+        if (memberId != 0) {
+            if (checkSubscriptionByYear(memberId, subscriptionDao.getSubscriptionYear())) {
+                String formattedDate = new DateTimeCalc().getTodayDate();
+                SubscriptionDum subscription = new SubscriptionDum();
+                subscription.setId(0);
+                subscription.setAmount(subscriptionDao.getAmount());
+                subscription.setSubscriptionYear(subscriptionDao.getSubscriptionYear());
+                subscription.setMemberId(memberId);
+                subscription.setCrBy(user);
+                subscription.setCrAt(formattedDate);
+                //subscriptionRepository.save(subscription);
+                return "success";
+            }
+            return "Member Subscribed already in current year";
+        } else {
+            return "Set Member Details in Member page";
+        }
+    }
+
+    public String removeSubscription(SubscriptionDao subscriptionDao, String eid) {
+        Integer memberId = memberService.getMemberId(subscriptionDao.getMemberNumber());
+        if (memberId != 0) {
+            if (checkSubscriptionByYear(memberId, subscriptionDao.getSubscriptionYear())) {
+                return "Member Not Subscribed in given year";
+            }
+            SubscriptionDum subscription = subscriptionRepository.findByMemberId(memberId);
+            //subscriptionRepository.delete(subscription);
+            return "Removed the subscription in given year";
+        } else {
+            return "Set Member Details in Member page";
+        }
     }
 }

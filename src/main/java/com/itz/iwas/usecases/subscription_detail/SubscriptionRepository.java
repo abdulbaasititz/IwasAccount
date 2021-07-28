@@ -33,4 +33,12 @@ public interface SubscriptionRepository extends JpaRepository<SubscriptionDum, I
 
     @Query(value = "SELECT sum(Amount) as totalAmount FROM Subscription", nativeQuery = true)
     String totalAmount();
+
+    @Query(value = "SELECT sum(Amount) as totalAmount FROM Subscription Where SubscriptionYear " +
+            "Between ?1 and ?2", nativeQuery = true)
+    String totalAmountByYear(String fromYear, String toYear);
+
+    SubscriptionDum findByMemberIdAndSubscriptionYear(Integer memberId, String subYear);
+
+    SubscriptionDum findByMemberId(Integer memberId);
 }

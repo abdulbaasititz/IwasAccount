@@ -10,6 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Date;
 
 @Controller
 @RequestMapping("${spring.base.path}" + "/v1")
@@ -28,4 +31,15 @@ public class DashboardController {
         dashboardDao.setTotalMember(memberService.getMemberCount());
         return new ResponseEntity<>(dashboardDao, HttpStatus.OK);
     }
+
+    @GetMapping("/get/dashboard/total-amount")
+    public ResponseEntity<?> getTotalAmountByYear(@RequestParam String fromYear, @RequestParam String toYear) {
+        return new ResponseEntity<>(subscriptionService.totalAmountByYear(fromYear, toYear), HttpStatus.OK);
+    }
+
+    @GetMapping("/get/dashboard/total-member")
+    public ResponseEntity<?> getTotalMemberByYear(@RequestParam Date fromDate, @RequestParam Date toDate) {
+        return new ResponseEntity<>(memberService.countMemberNumberByYear(fromDate, toDate), HttpStatus.OK);
+    }
+
 }

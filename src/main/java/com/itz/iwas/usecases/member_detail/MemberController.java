@@ -1,5 +1,7 @@
 package com.itz.iwas.usecases.member_detail;
 
+import com.itz.iwas.helpers.common.token.ClaimsDao;
+import com.itz.iwas.helpers.common.token.ClaimsSet;
 import com.itz.iwas.models.Membership;
 import com.itz.iwas.usecases.member_detail.dao.MemberDao;
 import com.itz.iwas.usecases.member_detail.pojo.MembershipPojo;
@@ -20,6 +22,8 @@ import java.util.List;
 public class MemberController {
     @Autowired
     MemberService memberService;
+    @Autowired
+    ClaimsSet claimsSet;
 
     @GetMapping("/get/member-detail")
     public ResponseEntity<?> getMemberDetails(HttpServletRequest request, @RequestParam int id) {
@@ -43,8 +47,16 @@ public class MemberController {
     }
 
     @PostMapping("/set/member")
-    public ResponseEntity<?> setMember(HttpServletRequest request, @RequestBody MemberDao memberDao) {
-        String status = memberService.setMember(memberDao);
+    public ResponseEntity<?> setMember(HttpServletRequest request, @RequestBody MemberDao memberDao) throws Exception {
+        ClaimsDao claimsDao = claimsSet.getClaimsDetailsAfterSet(request.getHeader("Authorization"));
+        String status = memberService.setMember(memberDao, claimsDao.getEid());
+        return new ResponseEntity<>(status, HttpStatus.OK);
+    }
+
+    @PostMapping("/edit/member")
+    public ResponseEntity<?> editMember(HttpServletRequest request, @RequestBody MemberDao memberDao) throws Exception {
+        ClaimsDao claimsDao = claimsSet.getClaimsDetailsAfterSet(request.getHeader("Authorization"));
+        String status = memberService.editMember(memberDao, claimsDao.getEid());
         return new ResponseEntity<>(status, HttpStatus.OK);
     }
 

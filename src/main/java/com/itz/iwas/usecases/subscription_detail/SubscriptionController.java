@@ -1,15 +1,15 @@
 package com.itz.iwas.usecases.subscription_detail;
 
+import com.itz.iwas.helpers.common.token.ClaimsDao;
+import com.itz.iwas.helpers.common.token.ClaimsSet;
+import com.itz.iwas.usecases.subscription_detail.dao.SubscriptionDao;
 import com.itz.iwas.usecases.subscription_detail.pojo.SubscriptionPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -19,6 +19,8 @@ import java.util.List;
 public class SubscriptionController {
     @Autowired
     SubscriptionService subscriptionService;
+    @Autowired
+    ClaimsSet claimsSet;
 
     @GetMapping("/get/all-subscription")
     public ResponseEntity<?> getAllSubscription(HttpServletRequest request) {
@@ -33,11 +35,18 @@ public class SubscriptionController {
         return new ResponseEntity<>(getSubscription, HttpStatus.OK);
 
     }
-//    @GetMapping("/get/subscription")
-//    public ResponseEntity<?> getSubscriptionByDate (HttpServletRequest request, @RequestParam Date fromDate
-//        ,@RequestParam Date toDate){
-//
-//
-//        return new ResponseEntity<>("",HttpStatus.OK);
-//    }
+
+    @PostMapping("/set/subscription")
+    public ResponseEntity<?> setSubscription(HttpServletRequest request, @RequestBody SubscriptionDao subscriptionDao) throws Exception {
+        ClaimsDao claimsDao = claimsSet.getClaimsDetailsAfterSet(request.getHeader("Authorization"));
+        String status = subscriptionService.setSubscription(subscriptionDao, claimsDao.getEid());
+        return new ResponseEntity<>(status, HttpStatus.OK);
+    }
+
+    @PostMapping("/delete/subscription")
+    public ResponseEntity<?> deleteSubscription(HttpServletRequest request, @RequestBody SubscriptionDao subscriptionDao) throws Exception {
+        ClaimsDao claimsDao = claimsSet.getClaimsDetailsAfterSet(request.getHeader("Authorization"));
+        String status = subscriptionService.removeSubscription(subscriptionDao, claimsDao.getEid());
+        return new ResponseEntity<>(status, HttpStatus.OK);
+    }
 }
