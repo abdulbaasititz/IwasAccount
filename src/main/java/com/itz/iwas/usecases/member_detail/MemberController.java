@@ -67,4 +67,11 @@ public class MemberController {
         return new ResponseEntity<>(getMember, HttpStatus.OK);
     }
 
+    @DeleteMapping("/del")
+    public ResponseEntity<?> removeMember(HttpServletRequest request, @RequestParam String memberNumber) throws Exception {
+        ClaimsDao claimsDao = claimsSet.getClaimsDetailsAfterSet(request.getHeader("Authorization"));
+        String status = memberService.removeMember(memberNumber, claimsDao.getEid());
+        return new ResponseEntity<>(status, HttpStatus.OK);
+    }
+
 }

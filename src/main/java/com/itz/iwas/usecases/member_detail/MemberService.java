@@ -78,8 +78,8 @@ public class MemberService {
             membership.setDesignation(memberDao.getDesignation());
             membership.setPermanentAddress(memberDao.getPermanentAddress());
             membership.setIsActive(1);
-            membership.setCrBy(user);
-            membership.setCrAt(formattedDate);
+            membership.setUpBy(user);
+            membership.setUpAt(formattedDate);
             //memberRepository.save(membership);
             return "success";
         } else {
@@ -100,4 +100,19 @@ public class MemberService {
         return memberRepository.countMemberNumberByYear(fromDate, toDate);
     }
 
+    public String removeMember(String memberNumber, String user) {
+        Integer getNumber = getMemberId(memberNumber);
+        if (getNumber != 0) {
+            String formattedDate = new DateTimeCalc().getTodayDate();
+            Membership membership = new Membership();
+            membership.setId(getNumber);
+            membership.setIsActive(0);
+            membership.setUpBy(user);
+            membership.setUpAt(formattedDate);
+            //memberRepository.save(membership);
+            return "Set as inactive";
+        } else {
+            return "No Data Present";
+        }
+    }
 }
