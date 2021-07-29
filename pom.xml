@@ -99,6 +99,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>Iwas_Web_Service</finalName>
 	</build>
 
 </project>

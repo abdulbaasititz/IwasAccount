@@ -17,10 +17,10 @@ RUN ls
 #COPY ./target/Iwas_Web_Service.jar app.jar
 #ADD ./target/Iwas_Web_Service.jar /developments/
 
-EXPOSE 9050
+EXPOSE 9080
 #ENTRYPOINT ["java","-jar","/target/Iwas_Web_Service.jar"]
 ENTRYPOINT ["java","-jar","Iwas_Web_Service.jar"]
 
 #Run Command
-#docker build --tag=iwas-spring:latest
-#docker run -d -p 9050:80 iwas-spring:latest
+#docker build --tag=iwas-accounts-spring:latest
+#docker run -d -p 9080:80 iwas-accounts-spring:latest
