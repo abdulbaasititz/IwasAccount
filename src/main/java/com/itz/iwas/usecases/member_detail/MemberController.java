@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("${spring.base.path}" + "/v1")
@@ -49,15 +51,21 @@ public class MemberController {
     @PostMapping("/set/member")
     public ResponseEntity<?> setMember(HttpServletRequest request, @RequestBody MemberDao memberDao) throws Exception {
         ClaimsDao claimsDao = claimsSet.getClaimsDetailsAfterSet(request.getHeader("Authorization"));
-        String status = memberService.setMember(memberDao, claimsDao.getEid());
-        return new ResponseEntity<>(status, HttpStatus.OK);
+        String message = memberService.setMember(memberDao, claimsDao.getEid());
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "1");
+        response.put("message", message);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/edit/member")
     public ResponseEntity<?> editMember(HttpServletRequest request, @RequestBody MemberDao memberDao) throws Exception {
         ClaimsDao claimsDao = claimsSet.getClaimsDetailsAfterSet(request.getHeader("Authorization"));
-        String status = memberService.editMember(memberDao, claimsDao.getEid());
-        return new ResponseEntity<>(status, HttpStatus.OK);
+        String message = memberService.editMember(memberDao, claimsDao.getEid());
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "1");
+        response.put("message", message);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/get/range-member")
@@ -70,8 +78,11 @@ public class MemberController {
     @DeleteMapping("/del")
     public ResponseEntity<?> removeMember(HttpServletRequest request, @RequestParam String memberNumber) throws Exception {
         ClaimsDao claimsDao = claimsSet.getClaimsDetailsAfterSet(request.getHeader("Authorization"));
-        String status = memberService.removeMember(memberNumber, claimsDao.getEid());
-        return new ResponseEntity<>(status, HttpStatus.OK);
+        String message = memberService.removeMember(memberNumber, claimsDao.getEid());
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "1");
+        response.put("message", message);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }

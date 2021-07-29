@@ -12,7 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("${spring.base.path}" + "/v1")
@@ -39,14 +41,20 @@ public class SubscriptionController {
     @PostMapping("/set/subscription")
     public ResponseEntity<?> setSubscription(HttpServletRequest request, @RequestBody SubscriptionDao subscriptionDao) throws Exception {
         ClaimsDao claimsDao = claimsSet.getClaimsDetailsAfterSet(request.getHeader("Authorization"));
-        String status = subscriptionService.setSubscription(subscriptionDao, claimsDao.getEid());
-        return new ResponseEntity<>(status, HttpStatus.OK);
+        String message = subscriptionService.setSubscription(subscriptionDao, claimsDao.getEid());
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "1");
+        response.put("message", message);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/del/subscription")
     public ResponseEntity<?> deleteSubscription(HttpServletRequest request, @RequestBody SubscriptionDao subscriptionDao) throws Exception {
         ClaimsDao claimsDao = claimsSet.getClaimsDetailsAfterSet(request.getHeader("Authorization"));
-        String status = subscriptionService.removeSubscription(subscriptionDao, claimsDao.getEid());
-        return new ResponseEntity<>(status, HttpStatus.OK);
+        String message = subscriptionService.removeSubscription(subscriptionDao, claimsDao.getEid());
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "1");
+        response.put("message", message);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

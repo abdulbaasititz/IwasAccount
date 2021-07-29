@@ -23,4 +23,4 @@ ENTRYPOINT ["java","-jar","Iwas_Web_Service.jar"]
 
 #Run Command
 #docker build --tag=iwas-accounts-spring:latest
-#docker run -d -p 9080:80 iwas-accounts-spring:latest
+#docker run -d -p 9080:9080 iwas-accounts-spring:latest

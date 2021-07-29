@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("${spring.base.path}" + "/v1")
@@ -34,12 +36,20 @@ public class DashboardController {
 
     @GetMapping("/get/dashboard/total-amount")
     public ResponseEntity<?> getTotalAmountByYear(@RequestParam String fromYear, @RequestParam String toYear) {
-        return new ResponseEntity<>(subscriptionService.totalAmountByYear(fromYear, toYear), HttpStatus.OK);
+        String message = subscriptionService.totalAmountByYear(fromYear, toYear);
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "1");
+        response.put("message", message);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/get/dashboard/total-member")
     public ResponseEntity<?> getTotalMemberByYear(@RequestParam Date fromDate, @RequestParam Date toDate) {
-        return new ResponseEntity<>(memberService.countMemberNumberByYear(fromDate, toDate), HttpStatus.OK);
+        String message = memberService.countMemberNumberByYear(fromDate, toDate);
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "1");
+        response.put("message", message);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
