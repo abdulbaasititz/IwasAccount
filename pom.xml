@@ -11,7 +11,8 @@
 	<groupId>com.itz</groupId>
 	<artifactId>iwas</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>iwas</name>
+	<packaging>jar</packaging>
+	<name>Iwas_Web_Service</name>
 	<description>Account Services</description>
 	<properties>
 		<java.version>1.8</java.version>
